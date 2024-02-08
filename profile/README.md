@@ -1,4 +1,9 @@
-# Build redroid with docker
+# Redroid Rockchip
+
+![rk3588](../images/redroid-rk3588.png)
+
+
+## Build redroid with docker
 
 ```bash
 #####################
