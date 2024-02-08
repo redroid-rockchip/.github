@@ -1,6 +1,6 @@
 # Redroid Rockchip
 
-![rk3588](../images/redroid-rk3588.png)
+![rk3588](https://github.com/redroid-rockchip/.github/blob/main/images/redroid-rk3588.png?raw=true)
 
 
 ## Build redroid with docker
