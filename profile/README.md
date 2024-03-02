@@ -62,21 +62,26 @@ sudo mount system.img system -o ro
 sudo mount vendor.img vendor -o ro
 sudo tar --xattrs -c vendor -C system --exclude="./vendor" . | docker import -c 'ENTRYPOINT ["/init", "androidboot.hardware=redroid"]' - redroid
 sudo umount system vendor
-
-# create rootfs only image for develop purpose
-tar --xattrs -c -C root . | docker import -c 'ENTRYPOINT ["/init", "androidboot.hardware=redroid"]' - redroid-dev
 ```
 
 Run docker container with redroid image
 ```bash
-sudo docker run -itd --name redroid --privileged -v ~/data:/data -v /dev/mali0:/dev/mali0 -p 5557:5555 redroid androidboot.redroid_gpu_mode=mali
+# 宿主机开启mac80211_hwsim模块，并将iptables切换到iptables-legacy，添加androidboot.redroid_virtiowifi=1开启虚拟wifi
+sudo docker run -itd --privileged \
+    --name redroid \
+    -v ~/data:/data \
+    -v /dev/mali0:/dev/mali0 \
+    -p 5555:5555 \
+    redroid \
+    androidboot.redroid_gpu_mode=mali \
+    androidboot.redroid_virtiowifi=1
 ```
 
 ## Other
 
 Export redroid image to other machine
 ```bash
-docker save redroid | bzip2 | ssh root@10.10.10.30 docker load
+docker save redroid | ssh root@rock.huji.show docker load
 ```
 
 Fix webview error: https://github.com/remote-android/redroid-doc/issues/464
