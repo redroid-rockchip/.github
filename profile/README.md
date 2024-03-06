@@ -1,6 +1,17 @@
 # Redroid Rockchip
 
-![rk3588](https://github.com/redroid-rockchip/.github/blob/main/images/redroid-rk3588.png?raw=true)
+- [x] GPU (mali-G610)
+- [x] GApps: https://gitlab.com/MindTheGapps/vendor_gapps
+- [x] Magisk Delta App 27.0: https://github.com/KitsuneMagisk/Magisk
+- [x] virtual wifi: enable the mac80211_hwsim module and switch to iptables-legacy
+- [ ] virtual gps
+- [ ] virtual camera
+- [ ] virtual battery
+- [ ] virtual sensor
+- [ ] virtual sensor
+- [ ] ...
+
+![rk3588](https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/redroid-rk3588.png)
 
 
 ## Build redroid with docker
