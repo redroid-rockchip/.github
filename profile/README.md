@@ -3,12 +3,12 @@
 - [x] GPU (mali-G610)
 - [x] GApps: https://gitlab.com/MindTheGapps/vendor_gapps
 - [x] Magisk Delta App 27.0: https://github.com/KitsuneMagisk/Magisk
-- [x] virtual wifi: enable the mac80211_hwsim module and switch to iptables-legacy
-- [ ] virtual gps
-- [ ] virtual camera
-- [ ] virtual battery
-- [ ] virtual sensor
-- [ ] virtual sensor
+- [x] Virtual wifi: enable the mac80211_hwsim module and switch to iptables-legacy
+- [ ] Virtual gps
+- [ ] Virtual camera
+- [ ] Virtual battery
+- [ ] Virtual sensor
+- [ ] Spoof device ids
 - [ ] ...
 
 ![rk3588](https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/redroid-rk3588.png)
@@ -75,9 +75,15 @@ sudo tar --xattrs -c vendor -C system --exclude="./vendor" . | docker import -c 
 sudo umount system vendor
 ```
 
+Export redroid image to rk3588 board
+```bash
+docker save redroid | ssh root@rock.huji.show docker load
+```
+
 Run docker container with redroid image
 ```bash
-# 宿主机开启mac80211_hwsim模块，并将iptables切换到iptables-legacy，添加androidboot.redroid_virtiowifi=1开启虚拟wifi
+# 添加androidboot.redroid_gpu_mode=mali开启gpu硬解
+# 添加androidboot.redroid_virtiowifi=1开启虚拟wifi
 sudo docker run -itd --privileged \
     --name redroid \
     -v ~/data:/data \
@@ -89,11 +95,6 @@ sudo docker run -itd --privileged \
 ```
 
 ## Other
-
-Export redroid image to other machine
-```bash
-docker save redroid | ssh root@rock.huji.show docker load
-```
 
 Fix webview error: https://github.com/remote-android/redroid-doc/issues/464
 ```bash
