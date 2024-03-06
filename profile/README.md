@@ -9,6 +9,9 @@
 - [ ] Virtual battery
 - [ ] Virtual sensor
 - [ ] Spoof device ids
+- [ ] Enable webview debug
+- [ ] Disable ssl pinning
+- [ ] Disable window flag FLAG_SECURE
 - [ ] ...
 
 ![rk3588](https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/redroid-rk3588.png)
