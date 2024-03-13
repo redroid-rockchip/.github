@@ -3,7 +3,7 @@
 - [x] GPU (mali-G610)
 - [x] GApps: https://gitlab.com/MindTheGapps/vendor_gapps
 - [x] Magisk Delta App 27.0: https://github.com/KitsuneMagisk/Magisk
-- [x] Virtual wifi: enable the mac80211_hwsim module and switch to iptables-legacy
+- [x] Virtual wifi: require the `mac80211_hwsim` module and switch to `iptables-legacy`.
 - [ ] Virtual gps
 - [ ] Virtual camera
 - [ ] Virtual battery
@@ -27,16 +27,6 @@ mkdir ~/redroid && cd ~/redroid
 
 repo init -u https://github.com/redroid-rockchip/platform_manifests.git -b redroid-12.0.0 --depth=1 --git-lfs
 repo sync -c
-
-# 修改build/soong/cc/config/global.go，向commonGlobalCflags数组添加全局cflags "-DANDROID_12"
-vim build/soong/cc/config/global.go
-# var (
-#	// Flags used by lots of devices.  Putting them in package static variables
-#	// will save bytes in build.ninja so they aren't repeated for every file
-#	commonGlobalCflags = []string{
-#		"-DANDROID_12",  <================================================ add this line
-#		"-DANDROID",
-#		"-fmessage-length=0",
 
 #####################
 # create builder
@@ -70,7 +60,7 @@ m
 #####################
 # create redroid image in *HOST*
 #####################
-cd ~/redroid/out/target/product/redroid_x86_64
+cd ~/redroid/out/target/product/redroid_arm64
 
 sudo mount system.img system -o ro
 sudo mount vendor.img vendor -o ro
