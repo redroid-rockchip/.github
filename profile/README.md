@@ -6,7 +6,7 @@
 - [x] Virtual wifi: require the `mac80211_hwsim` module and switch to `iptables-legacy`.
 - [ ] Virtual gps
 - [ ] Virtual camera
-- [ ] Virtual battery
+- [x] Virtual battery
 - [ ] Virtual sensor
 - [ ] Spoof device ids
 - [ ] Enable webview debug
