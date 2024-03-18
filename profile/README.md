@@ -1,23 +1,104 @@
 # Redroid Rockchip
 
-- [x] GPU (mali-G610)
-- [x] GApps: https://gitlab.com/MindTheGapps/vendor_gapps
-- [x] Magisk Delta App 27.0: https://github.com/KitsuneMagisk/Magisk
-- [x] Virtual wifi: require the `mac80211_hwsim` module and switch to `iptables-legacy`.
-- [ ] Virtual gps
-- [ ] Virtual camera
-- [x] Virtual battery
-- [ ] Virtual sensor
-- [ ] Spoof device ids
-- [ ] Enable webview debug
-- [ ] Disable ssl pinning
-- [ ] Disable window flag FLAG_SECURE
-- [ ] ...
-
-![rk3588](https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/redroid-rk3588.png)
+## Features
 
 
-## Build redroid with docker
+<details>
+<summary> ✅ GPU (mali-G610) </summary>
+
+![mali](https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/mali.png)
+</details>
+
+
+<details>
+<summary> ✅ GApps 👉 https://gitlab.com/MindTheGapps/vendor_gapps </summary>
+
+![gapps](https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/gapps.png)
+</details>
+
+
+<details>
+<summary> ✅ Magisk Delta 👉 https://github.com/KitsuneMagisk/Magisk </summary>
+
+![magisk](https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/magisk.png)
+</details>
+
+
+<details>
+<summary> ✅ Virtual wifi 👉 https://github.com/redroid-rockchip/vendor_redroid_ext/tree/master/wifi </summary>
+
+##### Required in host
+1. `mac80211_hwsim` kernel module
+2. switch to `iptables-legacy`
+
+![wifi](https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/wifi.png)
+</details>
+
+
+<details>
+<summary> ✅ Virtual gps 👉 https://github.com/redroid-rockchip/vendor_redroid_ext/tree/master/gps </summary>
+
+##### Update latitude and longitude
+```bash
+adb shell 'echo "LatitudeDegrees=30.281026818001678" > /data/vendor/gps/gnss'
+adb shell 'echo "LongitudeDegrees=120.01934876982831" >> /data/vendor/gps/gnss'
+adb shell 'echo "AltitudeMeters=1.60062531" >> /data/vendor/gps/gnss'
+adb shell 'echo "BearingDegrees=0" >> /data/vendor/gps/gnss'
+adb shell 'echo "SpeedMetersPerSec=0" >> /data/vendor/gps/gnss'
+```
+
+![gps](https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/gps.png)
+</details>
+
+
+<details>
+<summary> ✅ Virtual battery 👉 https://github.com/redroid-rockchip/vendor_redroid_ext/tree/master/battery </summary>
+
+##### Update latitude and longitude
+```bash
+adb shell 'echo 88 > /data/vendor/battery/power_supply/battery/capacity'
+```
+
+![battery](https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/battery.png)
+</details>
+
+
+<details open>
+<summary> Virtual camera </summary>
+</details>
+
+
+<details open>
+<summary> Virtual sensor </summary>
+</details>
+
+
+<details open>
+<summary> Enable webview debug </summary>
+</details>
+
+
+<details open>
+<summary> Spoof device ids </summary>
+</details>
+
+
+<details open>
+<summary> Disable ssl pinning </summary>
+</details>
+
+
+<details>
+<summary> ✅ Disable window flag FLAG_SECURE </summary>
+</details>
+
+
+<details open>
+<summary> ... </summary>
+</details>
+
+
+## Build redroid
 
 ```bash
 #####################
@@ -76,7 +157,7 @@ docker save redroid | ssh root@rock.huji.show docker load
 Run docker container with redroid image
 ```bash
 # 添加androidboot.redroid_gpu_mode=mali开启gpu硬解
-# 添加androidboot.redroid_virtiowifi=1开启虚拟wifi
+# 添加androidboot.redroid_virtual_wifi=1开启虚拟wifi
 sudo docker run -itd --privileged \
     --name redroid \
     -v ~/data:/data \
@@ -84,8 +165,12 @@ sudo docker run -itd --privileged \
     -p 5555:5555 \
     redroid \
     androidboot.redroid_gpu_mode=mali \
-    androidboot.redroid_virtiowifi=1
+    androidboot.redroid_virtual_wifi=1
 ```
+
+## Issues
+
+click 👉 https://github.com/redroid-rockchip/.github/issues
 
 ## Other
 
