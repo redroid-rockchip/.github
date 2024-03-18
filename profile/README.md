@@ -27,9 +27,9 @@
 <details>
 <summary> ✅ Virtual wifi 👉 https://github.com/redroid-rockchip/vendor_redroid_ext/tree/master/wifi </summary>
 
-##### Required in host
-1. `mac80211_hwsim` kernel module
-2. switch to `iptables-legacy`
+##### Required
+1. `mac80211_hwsim` kernel module in host
+2. switch to `iptables-legacy` in host
 
 <img src="https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/wifi.png" width="432px" height="768px"/>
 </details>
@@ -54,7 +54,7 @@ adb shell 'echo "SpeedMetersPerSec=0" >> /data/vendor/gps/gnss'
 <details>
 <summary> ✅ Virtual battery 👉 https://github.com/redroid-rockchip/vendor_redroid_ext/tree/master/battery </summary>
 
-##### Update latitude and longitude
+##### Update battery capacity
 ```bash
 adb shell 'echo 88 > /data/vendor/battery/power_supply/battery/capacity'
 ```
