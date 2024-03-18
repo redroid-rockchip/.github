@@ -6,21 +6,21 @@
 <details>
 <summary> ✅ GPU (mali-G610) </summary>
 
-![mali](https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/mali.png)
+<img src="https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/mali.png"/>
 </details>
 
 
 <details>
 <summary> ✅ GApps 👉 https://gitlab.com/MindTheGapps/vendor_gapps </summary>
 
-![gapps](https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/gapps.png)
+<img src="https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/gapps.png" width="432px" height="768px"/>
 </details>
 
 
 <details>
 <summary> ✅ Magisk Delta 👉 https://github.com/KitsuneMagisk/Magisk </summary>
 
-![magisk](https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/magisk.png)
+<img src="https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/magisk.png" width="432px" height="768px"/>
 </details>
 
 
@@ -31,7 +31,7 @@
 1. `mac80211_hwsim` kernel module
 2. switch to `iptables-legacy`
 
-![wifi](https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/wifi.png)
+<img src="https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/wifi.png" width="432px" height="768px"/>
 </details>
 
 
@@ -47,7 +47,7 @@ adb shell 'echo "BearingDegrees=0" >> /data/vendor/gps/gnss'
 adb shell 'echo "SpeedMetersPerSec=0" >> /data/vendor/gps/gnss'
 ```
 
-![gps](https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/gps.png)
+<img src="https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/gps.png" width="432px" height="768px"/>
 </details>
 
 
@@ -59,7 +59,7 @@ adb shell 'echo "SpeedMetersPerSec=0" >> /data/vendor/gps/gnss'
 adb shell 'echo 88 > /data/vendor/battery/power_supply/battery/capacity'
 ```
 
-![battery](https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/battery.png)
+<img src="https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/battery.png" width="432px" height="768px"/>
 </details>
 
 
