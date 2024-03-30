@@ -98,6 +98,86 @@ adb shell 'echo 88 > /data/vendor/battery/power_supply/battery/capacity'
 </details>
 
 
+## Experimental
+
+### Dependency
+
+1. Install Docker and Install the Compose plugin: https://docs.docker.com/compose/install/linux/）
+
+```
+wget -qO- get.docker.com | bash
+sudo apt-get update
+sudo apt-get install docker-compose-plugin
+```
+
+2. Install Git
+
+```bash
+sudo apt-get update
+sudo apt-get install git
+```
+
+3. Install linktools library and add redroid repository
+
+```
+python3 -m pip install -U "linktools[container]"
+ct-cntr repo add https://github.com/ice-black-tea/cntr-mobile
+ct-cntr repo update
+```
+
+### [Experimental] Run redroid in arm64 Board
+
+```bash
+ct-cntr add redroid
+ct-cntr up
+```
+
+### [Experimental] Build in x86_64 PC
+
+```bash
+#####################
+# fetch code
+#####################
+mkdir ~/redroid && cd ~/redroid
+
+repo init -u https://github.com/redroid-rockchip/platform_manifests.git -b redroid-12.0.0 --depth=1 --git-lfs
+repo sync -c
+
+#####################
+# create and start builder
+#####################
+ct-cntr add redroid-builder
+ct-cntr config set REDROID_BUILD_PATH=~/redroid
+ct-cntr up
+ct-cntr exec redroid-builder shell
+
+#####################
+# build redroid in *DOCKER*
+#####################
+
+. build/envsetup.sh
+lunch redroid_arm64-userdebug
+
+# 我们编译的是rk3588，用的gpu是mali-G610
+# 但是hardware/rockchip/librkvpu/omx_get_gralloc_private/Android.go没有定义mali-G610
+# 所以此处选择同用bifrost库的mali-G52
+export TARGET_BOARD_PLATFORM_GPU=mali-G52
+export TARGET_RK_GRALLOC_VERSION=4
+
+# start to build
+m
+
+#####################
+# create redroid image in *HOST*
+#####################
+ct-cntr exec redroid-builder make-arm64-image
+```
+
+Export redroid image to rockchip in x86_64 PC
+```bash
+docker save redroid | ssh root@rock.huji.show docker load
+```
+
 ## Build redroid
 
 ```bash
@@ -145,7 +225,7 @@ cd ~/redroid/out/target/product/redroid_arm64
 
 sudo mount system.img system -o ro
 sudo mount vendor.img vendor -o ro
-sudo tar --xattrs -c vendor -C system --exclude="./vendor" . | docker import -c 'ENTRYPOINT ["/init", "androidboot.hardware=redroid"]' - redroid
+sudo tar --xattrs -c vendor -C system --exclude="./vendor" . | DOCKER_DEFAULT_PLATFORM=linux/arm64 docker import -c 'ENTRYPOINT ["/init", "androidboot.hardware=redroid"]' - redroid
 sudo umount system vendor
 ```
 
