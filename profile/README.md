@@ -122,7 +122,7 @@ sudo apt-get install git
 ```
 python3 -m pip install -U "linktools[container]"
 ct-cntr repo add https://github.com/ice-black-tea/cntr-mobile
-ct-cntr repo update
+# ct-cntr repo update
 ```
 
 ### [Experimental] Run redroid in arm64 Board
@@ -135,40 +135,32 @@ ct-cntr up
 ### [Experimental] Build in x86_64 PC
 
 ```bash
-#####################
-# fetch code
-#####################
-mkdir ~/redroid && cd ~/redroid
-
-repo init -u https://github.com/redroid-rockchip/platform_manifests.git -b redroid-12.0.0 --depth=1 --git-lfs
-repo sync -c
+ct-cntr add redroid-builder
 
 #####################
 # create and start builder
 #####################
-ct-cntr add redroid-builder
-ct-cntr config set REDROID_BUILD_PATH=~/redroid
-ct-cntr up
-ct-cntr exec redroid-builder shell
-
-#####################
-# build redroid in *DOCKER*
-#####################
-
-. build/envsetup.sh
-lunch redroid_arm64-userdebug
-
 # 我们编译的是rk3588，用的gpu是mali-G610
 # 但是hardware/rockchip/librkvpu/omx_get_gralloc_private/Android.go没有定义mali-G610
 # 所以此处选择同用bifrost库的mali-G52
-export TARGET_BOARD_PLATFORM_GPU=mali-G52
-export TARGET_RK_GRALLOC_VERSION=4
-
-# start to build
-m
+ct-cntr exec redroid-builder set-env TARGET_BOARD_PLATFORM_GPU=mali-G52 TARGET_RK_GRALLOC_VERSION=4
+ct-cntr config set REDROID_BUILD_PATH=~/redroid
+ct-cntr config  # check whether the docker configuration is correct
+ct-cntr up
 
 #####################
-# create redroid image in *HOST*
+# fetch code
+#####################
+ct-cntr exec redroid-builder init-repo -u https://github.com/redroid-rockchip/platform_manifests.git -b redroid-12.0.0
+ct-cntr exec redroid-builder sync-repo
+
+#####################
+# build redroid
+#####################
+ct-cntr exec redroid-builder build-arm64
+
+#####################
+# create redroid image
 #####################
 ct-cntr exec redroid-builder make-arm64-image
 ```
