@@ -102,40 +102,33 @@ adb shell 'echo 88 > /data/vendor/battery/power_supply/battery/capacity'
 
 ### Dependency
 
-1. Install Docker and Install the Compose plugin: https://docs.docker.com/compose/install/linux/）
-
-```
-wget -qO- get.docker.com | bash
-sudo apt-get update
-sudo apt-get install docker-compose-plugin
-```
-
-2. Install Git
+1. Install Python3, Git, [Docker](https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script), [Docker Compose](https://docs.docker.com/compose/install/linux/)
 
 ```bash
+wget -qO- get.docker.com | bash
 sudo apt-get update
-sudo apt-get install git
+sudo apt-get install -y python3 git docker-compose-plugin
 ```
 
-3. Install linktools library and add redroid repository
+2. Install linktools library and add redroid repository
 
-```
+```bash
 python3 -m pip install -U "linktools[container]"
-ct-cntr repo add https://github.com/ice-black-tea/cntr-mobile
-# ct-cntr repo update
+ct-cntr repo add https://github.com/ice-black-tea/cntr-mobile  # add remote repository
+ct-cntr repo update  # update code from remote repository
 ```
 
 ### [Experimental] Run redroid in arm64 Board
 
 ```bash
-ct-cntr add redroid
-ct-cntr up
+ct-cntr add redroid  # add redroid to the installation list
+ct-cntr up  # deploy redroid
 ```
 
 ### [Experimental] Build in x86_64 PC
 
 ```bash
-ct-cntr add redroid-builder
+ct-cntr add redroid-builder  # add redroid-builder to the installation list
 
 #####################
 # create and start builder
@@ -144,9 +137,9 @@ ct-cntr add redroid-builder
 # 但是hardware/rockchip/librkvpu/omx_get_gralloc_private/Android.go没有定义mali-G610
 # 所以此处选择同用bifrost库的mali-G52
 ct-cntr exec redroid-builder set-env TARGET_BOARD_PLATFORM_GPU=mali-G52 TARGET_RK_GRALLOC_VERSION=4
-ct-cntr config set REDROID_BUILD_PATH=~/redroid
+ct-cntr config set REDROID_BUILD_PATH=~/redroid # set the path to store source code
 ct-cntr config  # check whether the docker configuration is correct
-ct-cntr up
+ct-cntr up  # deploy redroid
 
 #####################
 # fetch code
