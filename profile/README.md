@@ -97,10 +97,24 @@ adb shell 'echo 88 > /data/vendor/battery/power_supply/battery/capacity'
 <summary> ... </summary>
 </details>
 
+## Getting Started
+
+```bash
+# Add androidboot.redroid_gpu_mode=mali to enable GPU hardware decoding.
+# Add androidboot.redroid_virtual_wifi=1 to enable virtual WiFi.
+sudo docker run -itd --privileged \
+    --name redroid \
+    -v ~/data:/data \
+    -v /dev/mali0:/dev/mali0 \
+    -p 5555:5555 \
+    iceblacktea/redroid-arm64:12.0.0-240328 \
+    androidboot.redroid_gpu_mode=mali \
+    androidboot.redroid_virtual_wifi=1
+```
 
 ## Experimental
 
-### Dependency
+### [Experimental] Dependency
 
 1. Install Python3, Git, [Docker](https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script), [Docker Compose](https://docs.docker.com/compose/install/linux/)
 
@@ -122,7 +136,7 @@ ct-cntr repo update  # update code from remote repository
 
 ```bash
 ct-cntr add redroid  # add redroid to the installation list
-ct-cntr up  # deploy redroid
+ct-cntr up  # start redroid containers
 ```
 
 ### [Experimental] Build in x86_64 PC
@@ -133,13 +147,13 @@ ct-cntr add redroid-builder  # add redroid-builder to the installation list
 #####################
 # create and start builder
 #####################
-# 我们编译的是rk3588，用的gpu是mali-G610
-# 但是hardware/rockchip/librkvpu/omx_get_gralloc_private/Android.go没有定义mali-G610
-# 所以此处选择同用bifrost库的mali-G52
+# We are compiling for rk3588, using the Mali-G610 GPU.
+# However, in hardware/rockchip/librkvpu/omx_get_gralloc_private/Android.go, Mali-G610 is not defined.
+# Therefore, we are selecting Mali-G52, which also utilizes the Bifrost library, for this purpose.
 ct-cntr exec redroid-builder set-env TARGET_BOARD_PLATFORM_GPU=mali-G52 TARGET_RK_GRALLOC_VERSION=4
 ct-cntr config set REDROID_BUILD_PATH=~/redroid # set the path to store source code
 ct-cntr config  # check whether the docker configuration is correct
-ct-cntr up  # deploy redroid
+ct-cntr up  # start redroid-builder container
 
 #####################
 # fetch code
@@ -173,6 +187,9 @@ mkdir ~/redroid && cd ~/redroid
 
 repo init -u https://github.com/redroid-rockchip/platform_manifests.git -b redroid-12.0.0 --depth=1 --git-lfs
 repo sync -c
+
+# apt install git-lfs and then
+repo forall -g lfs -c git lfs pull
 
 #####################
 # create builder
@@ -214,35 +231,11 @@ sudo tar --xattrs -c vendor -C system --exclude="./vendor" . | DOCKER_DEFAULT_PL
 sudo umount system vendor
 ```
 
-Export redroid image to rk3588 board
+Export redroid image to board
 ```bash
 docker save redroid | ssh root@rock.huji.show docker load
-```
-
-Run docker container with redroid image
-```bash
-# 添加androidboot.redroid_gpu_mode=mali开启gpu硬解
-# 添加androidboot.redroid_virtual_wifi=1开启虚拟wifi
-sudo docker run -itd --privileged \
-    --name redroid \
-    -v ~/data:/data \
-    -v /dev/mali0:/dev/mali0 \
-    -p 5555:5555 \
-    redroid \
-    androidboot.redroid_gpu_mode=mali \
-    androidboot.redroid_virtual_wifi=1
 ```
 
 ## Issues
 
 click 👉 https://github.com/redroid-rockchip/.github/issues
-
-## Other
-
-Fix webview error: https://github.com/remote-android/redroid-doc/issues/464
-```bash
-## install lfs
-# apt install git-lfs
-## then run
-repo forall -g lfs -c git lfs pull
-```
