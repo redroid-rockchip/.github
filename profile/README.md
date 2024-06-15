@@ -121,28 +121,33 @@ sudo docker run -itd --privileged \
 ```bash
 wget -qO- get.docker.com | bash
 sudo apt-get update
-sudo apt-get install -y python3 git docker-compose-plugin
+sudo apt-get install -y python3 python3-pip git docker-compose-plugin
 ```
 
 2. Install linktools library and add redroid repository
 
 ```bash
 python3 -m pip install -U "linktools[container]"
-ct-cntr repo add https://github.com/ice-black-tea/cntr-mobile  # add remote repository
-ct-cntr repo update  # update code from remote repository
+ct-cntr repo add https://github.com/ice-black-tea/cntr-mobile  # fetch code from remote repository
 ```
 
 ### [Experimental] Run redroid in arm64 Board
 
 ```bash
-ct-cntr add redroid  # add redroid to the installation list
-ct-cntr up  # start redroid containers
+ct-cntr add redroid                                            # add redroid containers
+ct-cntr config set \
+    REDROID_COUNT=3 \
+    REDROID_GPU_MODE=mali \
+    REDROID_VIRTUAL_WIFI=true
+ct-cntr up                                                     # start redroid containers
 ```
 
 ### [Experimental] Build in x86_64 PC
 
+Build the redroid image for the first time
+
 ```bash
-ct-cntr add redroid-builder  # add redroid-builder to the installation list
+ct-cntr add redroid-builder                                    # add redroid-builder container
 
 #####################
 # create and start builder
@@ -151,9 +156,9 @@ ct-cntr add redroid-builder  # add redroid-builder to the installation list
 # However, in hardware/rockchip/librkvpu/omx_get_gralloc_private/Android.go, Mali-G610 is not defined.
 # Therefore, we are selecting Mali-G52, which also utilizes the Bifrost library, for this purpose.
 ct-cntr exec redroid-builder set-env TARGET_BOARD_PLATFORM_GPU=mali-G52 TARGET_RK_GRALLOC_VERSION=4
-ct-cntr config set REDROID_BUILD_PATH=~/redroid # set the path to store source code
-ct-cntr config  # check whether the docker configuration is correct
-ct-cntr up  # start redroid-builder container
+ct-cntr config set REDROID_BUILD_PATH=~/redroid                # set the path to store source code
+ct-cntr config                                                 # check whether the docker configuration is correct
+ct-cntr up                                                     # start redroid-builder container
 
 #####################
 # fetch code
@@ -172,9 +177,17 @@ ct-cntr exec redroid-builder build-arm64
 ct-cntr exec redroid-builder make-arm64-image
 ```
 
-Export redroid image to rockchip in x86_64 PC
+Export the redroid image to rockchip
 ```bash
 docker save redroid | ssh root@rock.huji.show docker load
+```
+
+Build the redroid image for the second time
+```bash
+ct-cntr repo update                                            # update code from remote repository
+ct-cntr exec redroid-builder sync-repo
+ct-cntr exec redroid-builder build-arm64                       # build redroid
+ct-cntr exec redroid-builder make-arm64-image                  # create redroid image
 ```
 
 ## Build redroid
