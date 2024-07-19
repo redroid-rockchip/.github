@@ -152,10 +152,6 @@ ct-cntr add redroid-builder                                    # add redroid-bui
 #####################
 # create and start builder
 #####################
-# We are compiling for rk3588, using the Mali-G610 GPU.
-# However, in hardware/rockchip/librkvpu/omx_get_gralloc_private/Android.go, Mali-G610 is not defined.
-# Therefore, we are selecting Mali-G52, which also utilizes the Bifrost library, for this purpose.
-ct-cntr exec redroid-builder set-env TARGET_BOARD_PLATFORM_GPU=mali-G52 TARGET_RK_GRALLOC_VERSION=4
 ct-cntr config set REDROID_BUILD_PATH=~/redroid                # set the path to store source code
 ct-cntr config                                                 # check whether the docker configuration is correct
 ct-cntr up                                                     # start redroid-builder container
@@ -169,12 +165,12 @@ ct-cntr exec redroid-builder sync-repo
 #####################
 # build redroid
 #####################
-ct-cntr exec redroid-builder build-arm64
+ct-cntr exec redroid-builder build-rk3588
 
 #####################
 # create redroid image
 #####################
-ct-cntr exec redroid-builder make-arm64-image
+ct-cntr exec redroid-builder make-image
 ```
 
 Export the redroid image to rockchip
