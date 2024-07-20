@@ -180,10 +180,11 @@ docker save redroid | ssh root@rock.huji.show docker load
 
 Build the redroid image for the second time
 ```bash
-ct-cntr repo update                                            # update code from remote repository
+python3 -m pip install -U "linktools[container]"
+ct-cntr repo update && ct-cntr up                              # update code from remote repository
 ct-cntr exec redroid-builder sync-repo
-ct-cntr exec redroid-builder build-arm64                       # build redroid
-ct-cntr exec redroid-builder make-arm64-image                  # create redroid image
+ct-cntr exec redroid-builder build-rk3588                      # build redroid
+ct-cntr exec redroid-builder make-image                        # create redroid image
 ```
 
 ## Build redroid
