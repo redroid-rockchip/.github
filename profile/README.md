@@ -2,7 +2,6 @@
 
 ## Features
 
-
 <details>
 <summary> ✅ GPU (mali-G610) </summary>
 
@@ -18,7 +17,7 @@
 
 
 <details>
-<summary> ✅ Magisk Delta 👉 https://github.com/KitsuneMagisk/Magisk </summary>
+<summary> ✅ Magisk Delta 👉 https://github.com/redroid-rockchip/vendor_magisk </summary>
 
 <img src="https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/magisk.png" width="432px" height="768px"/>
 </details>
@@ -49,7 +48,6 @@ adb shell 'echo "SpeedMetersPerSec=0" >> /data/vendor/gps/gnss'
 
 <img src="https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/gps.png" width="432px" height="768px"/>
 </details>
-
 
 <details>
 <summary> ✅ Virtual battery 👉 https://github.com/redroid-rockchip/vendor_redroid_ext/tree/master/battery </summary>
@@ -89,7 +87,7 @@ adb shell 'echo 88 > /data/vendor/battery/power_supply/battery/capacity'
 
 
 <details>
-<summary> ✅ Disable window flag FLAG_SECURE </summary>
+<summary> ✅ Create secure display 👉 https://github.com/redroid-rockchip/aosp_frameworks_native/commit/19a55ccc777db1bce1e3cd27e3bb39296d146cf4</summary>
 </details>
 
 
@@ -100,92 +98,30 @@ adb shell 'echo 88 > /data/vendor/battery/power_supply/battery/capacity'
 ## Getting Started
 
 ```bash
-# Add androidboot.redroid_gpu_mode=mali to enable GPU hardware decoding.
-# Add androidboot.redroid_virtual_wifi=1 to enable virtual WiFi.
 sudo docker run -itd --privileged \
     --name redroid \
     -v ~/data:/data \
     -v /dev/mali0:/dev/mali0 \
     -p 5555:5555 \
-    iceblacktea/redroid-arm64:12.0.0-240328 \
+    iceblacktea/redroid-arm64:12.0.0-241115 \
     androidboot.redroid_gpu_mode=mali \
-    androidboot.redroid_virtual_wifi=1
+    androidboot.redroid_wifi=1 \
+    androidboot.redroid_wifi_gateway=7.7.7.1/24 \
+    androidboot.redroid_magisk=1
 ```
 
-## Experimental
-
-### [Experimental] Dependency
-
-1. Install Python3, Git, [Docker](https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script), [Docker Compose](https://docs.docker.com/compose/install/linux/)
-
-```bash
-wget -qO- get.docker.com | bash
-sudo apt-get update
-sudo apt-get install -y python3 python3-pip git docker-compose-plugin
-```
-
-2. Install linktools library and add redroid repository
-
-```bash
-python3 -m pip install -U "linktools[container]"
-ct-cntr repo add https://github.com/ice-black-tea/cntr-mobile  # fetch code from remote repository
-```
-
-### [Experimental] Run redroid in arm64 Board
-
-```bash
-ct-cntr add redroid                                            # add redroid containers
-ct-cntr config set \
-    REDROID_COUNT=3 \
-    REDROID_GPU_MODE=mali \
-    REDROID_VIRTUAL_WIFI=true
-ct-cntr up                                                     # start redroid containers
-```
-
-### [Experimental] Build in x86_64 PC
-
-Build the redroid image for the first time
-
-```bash
-ct-cntr add redroid-builder                                    # add redroid-builder container
-
-#####################
-# create and start builder
-#####################
-ct-cntr config set REDROID_BUILD_PATH=~/redroid                # set the path to store source code
-ct-cntr config                                                 # check whether the docker configuration is correct
-ct-cntr up                                                     # start redroid-builder container
-
-#####################
-# fetch code
-#####################
-ct-cntr exec redroid-builder init-repo -u https://github.com/redroid-rockchip/platform_manifests.git -b redroid-12.0.0
-ct-cntr exec redroid-builder sync-repo
-
-#####################
-# build redroid
-#####################
-ct-cntr exec redroid-builder build-rk3588
-
-#####################
-# create redroid image
-#####################
-ct-cntr exec redroid-builder make-image
-```
-
-Export the redroid image to rockchip
-```bash
-docker save redroid | ssh root@rock.huji.show docker load
-```
-
-Build the redroid image for the second time
-```bash
-python3 -m pip install -U "linktools[container]"
-ct-cntr repo update && ct-cntr up                              # update code from remote repository
-ct-cntr exec redroid-builder sync-repo
-ct-cntr exec redroid-builder build-rk3588                      # build redroid
-ct-cntr exec redroid-builder make-image                        # create redroid image
-```
+| Param                               | Description                                                                                                | Default                                  |
+|-------------------------------------|------------------------------------------------------------------------------------------------------------|------------------------------------------|
+| `androidboot.redroid_width`         | display width                                                                                              | 720                                      |
+| `androidboot.redroid_height`        | display height                                                                                             | 1280                                     |
+| `androidboot.redroid_fps`           | display FPS                                                                                                | 30(GPU enabled)<br> 15 (GPU not enabled) |
+| `androidboot.redroid_dpi`           | display DPI                                                                                                | 320                                      |
+| `androidboot.redroid_net_ndns`      | number of DNS server, `8.8.8.8` will be used if no DNS server specified                                    | 0                                        |
+| `androidboot.redroid_net_dns<1..N>` | DNS                                                                                                        |                                          |
+| `androidboot.redroid_gpu_mode`      | choose from: `mail`, `guest`;<br>`guest`: use software rendering;<br>`mail`: use GPU accelerated rendering | `guest`                                  |
+| `androidboot.redroid_wifi`          | enable wifi<br/>1: enable;<br/>0: disable                                                                  | 0                                        |
+| `androidboot.redroid_wifi_gateway`  | wifi gateway (avoid conflicts with the local network's subnet)                                             | `7.7.7.1/24`                             |
+| `androidboot.redroid_magisk`        | enable magisk<br/>1: enable;<br/>0: disable                                                                | 0                                        |
 
 ## Build redroid
 
@@ -245,6 +181,87 @@ Export redroid image to board
 ```bash
 docker save redroid | ssh root@rock.huji.show docker load
 ```
+
+## Other
+
+
+<details>
+<summary>[Experimental] Build & Run Redroid</summary>
+
+#### Dependency
+
+1. Install Python3, Git, [Docker](https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script), [Docker Compose](https://docs.docker.com/compose/install/linux/)
+
+```bash
+wget -qO- get.docker.com | bash
+sudo apt-get update
+sudo apt-get install -y python3 python3-pip git docker-compose-plugin
+```
+
+2. Install linktools library and add redroid repository
+
+```bash
+python3 -m pip install -U "linktools[container]"
+ct-cntr repo add https://github.com/ice-black-tea/cntr-mobile  # fetch code from remote repository
+```
+
+#### Run redroid in arm64 Board
+
+```bash
+ct-cntr add redroid                                            # add redroid containers
+ct-cntr config set \
+    REDROID_COUNT=3 \
+    REDROID_GPU_MODE=mali \
+    REDROID_VIRTUAL_WIFI=true
+ct-cntr up                                                     # start redroid containers
+```
+
+#### Build in x86_64 PC
+
+Build the redroid image for the first time
+
+```bash
+ct-cntr add redroid-builder                                    # add redroid-builder container
+
+#####################
+# create and start builder
+#####################
+ct-cntr config set REDROID_BUILD_PATH=~/redroid                # set the path to store source code
+ct-cntr config                                                 # check whether the docker configuration is correct
+ct-cntr up                                                     # start redroid-builder container
+
+#####################
+# fetch code
+#####################
+ct-cntr exec redroid-builder init-repo -u https://github.com/redroid-rockchip/platform_manifests.git -b redroid-12.0.0
+ct-cntr exec redroid-builder sync-repo
+
+#####################
+# build redroid
+#####################
+ct-cntr exec redroid-builder build-rk3588
+
+#####################
+# create redroid image
+#####################
+ct-cntr exec redroid-builder make-image
+```
+
+Build the redroid image for the second time
+```bash
+ct-cntr update
+ct-cntr up                                                     # update code from remote repository
+ct-cntr exec redroid-builder sync-repo
+ct-cntr exec redroid-builder build-rk3588                      # build redroid
+ct-cntr exec redroid-builder make-image                        # create redroid image
+```
+
+Export the redroid image to rockchip
+```bash
+docker save redroid | ssh root@rock.huji.show docker load
+```
+
+</details>
 
 ## Issues
 
