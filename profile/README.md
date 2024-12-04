@@ -24,6 +24,23 @@
 
 
 <details>
+<summary> ✅ Virtual radio 👉 https://github.com/redroid-rockchip/vendor_redroid_ext2/tree/master/ril </summary>
+
+##### Thanks
+
+*Thanks to [@chenzhu005774](https://github.com/chenzhu005774) for providing vlte to support 4G internet access*
+
+##### Required
+1. switch to `iptables-legacy` in host
+2. if you can't access the internet via 4G, you need to configure the APN. 
+   1) go to Settings -> Network & internet -> Internet -> setting logo -> Access Point Names
+   2) click the menu in the upper right corner and select "Reset to default"
+
+<img src="https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/radio.png" width="432px" height="768px"/>
+</details>
+
+
+<details>
 <summary> ✅ Virtual wifi 👉 https://github.com/redroid-rockchip/vendor_redroid_ext/tree/master/wifi </summary>
 
 ##### Required
@@ -103,8 +120,9 @@ sudo docker run -itd --privileged \
     -v ~/data:/data \
     -v /dev/mali0:/dev/mali0 \
     -p 5555:5555 \
-    iceblacktea/redroid-arm64:12.0.0-241115 \
+    iceblacktea/redroid-arm64:12.0.0-241204 \
     androidboot.redroid_gpu_mode=mali \
+    androidboot.redroid_radio=1 \
     androidboot.redroid_wifi=1 \
     androidboot.redroid_wifi_gateway=7.7.7.1/24 \
     androidboot.redroid_magisk=1
@@ -119,6 +137,7 @@ sudo docker run -itd --privileged \
 | `androidboot.redroid_net_ndns`      | number of DNS server, `8.8.8.8` will be used if no DNS server specified                                    | 0                                        |
 | `androidboot.redroid_net_dns<1..N>` | DNS                                                                                                        |                                          |
 | `androidboot.redroid_gpu_mode`      | choose from: `mail`, `guest`;<br>`guest`: use software rendering;<br>`mail`: use GPU accelerated rendering | `guest`                                  |
+| `androidboot.redroid_radio`         | enable radio<br/>1: enable;<br/>0: disable                                                                 | 0                                        |
 | `androidboot.redroid_wifi`          | enable wifi<br/>1: enable;<br/>0: disable                                                                  | 0                                        |
 | `androidboot.redroid_wifi_gateway`  | wifi gateway (avoid conflicts with the local network's subnet)                                             | `7.7.7.1/24`                             |
 | `androidboot.redroid_magisk`        | enable magisk<br/>1: enable;<br/>0: disable                                                                | 0                                        |
