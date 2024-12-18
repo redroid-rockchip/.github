@@ -31,8 +31,7 @@
 *Thanks to [@chenzhu005774](https://github.com/chenzhu005774) for providing vlte to support 4G internet access*
 
 ##### Required
-1. switch to `iptables-legacy` in host
-2. if you can't access the internet via 4G, you need to configure the APN. 
+1. if you can't access the internet via 4G, you need to configure the APN. 
    1) go to Settings -> Network & internet -> Internet -> setting logo -> Access Point Names
    2) click the menu in the upper right corner and select "Reset to default"
 
@@ -45,7 +44,6 @@
 
 ##### Required
 1. `mac80211_hwsim` kernel module in host
-2. switch to `iptables-legacy` in host
 
 <img src="https://raw.githubusercontent.com/redroid-rockchip/.github/main/images/wifi.png" width="432px" height="768px"/>
 </details>
@@ -120,7 +118,7 @@ sudo docker run -itd --privileged \
     -v ~/data:/data \
     -v /dev/mali0:/dev/mali0 \
     -p 5555:5555 \
-    iceblacktea/redroid-arm64:12.0.0-241204 \
+    iceblacktea/redroid-arm64:12.0.0-241218 \
     androidboot.redroid_gpu_mode=mali \
     androidboot.redroid_radio=1 \
     androidboot.redroid_wifi=1 \
