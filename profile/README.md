@@ -118,11 +118,11 @@ sudo docker run -itd --privileged \
     -v ~/data:/data \
     -v /dev/mali0:/dev/mali0 \
     -p 5555:5555 \
-    iceblacktea/redroid-arm64:12.0.0-241218 \
+    iceblacktea/redroid-arm64:12.0.0-250116 \
     androidboot.redroid_gpu_mode=mali \
     androidboot.redroid_radio=1 \
     androidboot.redroid_wifi=1 \
-    androidboot.redroid_wifi_gateway=7.7.7.1/24 \
+    androidboot.redroid_wifi_gateway=10.100.200.1/24 \
     androidboot.redroid_magisk=1
 ```
 
